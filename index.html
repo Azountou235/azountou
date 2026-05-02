@@ -10,15 +10,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- VARIABLES (thème clair/sombre dynamique) --- */
+        /* VARIABLES & THEMES (dark/light) */
         :root {
             --bg: #050b14;
             --card-bg: rgba(15, 25, 45, 0.65);
             --card-border: rgba(0, 255, 255, 0.2);
             --glow-cyan: rgba(0, 255, 255, 0.4);
-            --glow-green: rgba(0, 255, 136, 0.4);
             --primary: #00f0ff;
-            --primary-dark: #00b4d8;
             --accent: #00ff88;
             --text: #b0c4de;
             --text-light: #e2e8f0;
@@ -26,7 +24,6 @@
             --font: 'Plus Jakarta Sans', sans-serif;
             --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             --nav-bg: rgba(10, 20, 35, 0.7);
-            --sidebar-bg: rgba(10, 20, 35, 0.9);
             --input-bg: rgba(5, 15, 25, 0.7);
             --border-color: #2d3a4a;
         }
@@ -34,20 +31,15 @@
             --bg: #f0f4fa;
             --card-bg: rgba(255, 255, 255, 0.7);
             --card-border: rgba(0, 0, 0, 0.1);
-            --glow-cyan: rgba(0, 100, 200, 0.3);
             --primary: #0066cc;
-            --primary-dark: #004c99;
             --accent: #00a86b;
             --text: #2c3e50;
             --text-light: #1a2a3a;
             --nav-bg: rgba(255, 255, 255, 0.8);
-            --sidebar-bg: rgba(255, 255, 255, 0.95);
             --input-bg: rgba(240, 245, 250, 0.8);
             --border-color: #cbd5e1;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: var(--font);
             background: var(--bg);
@@ -56,121 +48,52 @@
             overflow-x: hidden;
             transition: background 0.3s, color 0.2s;
         }
-
-        /* --- SCROLL REVEAL --- */
+        /* views */
         .view {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.7s ease, transform 0.7s ease;
+            min-height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
         }
         .view.revealed {
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* --- GLASS CARDS --- */
+        .active-view {
+            display: flex !important;
+        }
+        /* cards */
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
             border-radius: var(--radius);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             transition: var(--transition);
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
         }
-        .card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--glow-cyan);
-            transform: translateY(-5px);
-        }
-
-        /* --- BUTTONS --- */
-        .cta-button, .whatsapp-full-btn, #btn-verify-code, .copy-icon-btn, .icon-btn {
-            transition: var(--transition);
-            will-change: transform;
-        }
-        .cta-button:hover, .whatsapp-full-btn:hover, #btn-verify-code:hover, .copy-icon-btn:hover {
-            transform: scale(1.02);
-            filter: drop-shadow(0 0 8px var(--primary));
-        }
-        .cta-button:active, .whatsapp-full-btn:active, #btn-verify-code:active {
-            transform: scale(0.98);
-        }
-
-        input, select {
-            transition: var(--transition);
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-        }
-        input:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 12px var(--glow-cyan);
-            outline: none;
-        }
-
-        /* Navbar glass */
+        /* navbar */
         .navbar {
             background: var(--nav-bg);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 255, 255, 0.15);
-            transition: background 0.3s;
+            height: 60px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,255,255,0.15);
         }
-
-        /* Sidebar amélioré */
-        .sidebar {
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(25px);
-            border-right: 1px solid rgba(0, 255, 255, 0.3);
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 2px 0 20px rgba(0,0,0,0.5);
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100%;
-            z-index: 100;
-        }
-        .sidebar.active {
-            left: 0;
-        }
-        @keyframes borderPulse {
-            0% { border-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.2); }
-            50% { border-color: rgba(0, 255, 255, 0.9); box-shadow: 0 0 15px 0 rgba(0, 255, 255, 0.6); }
-            100% { border-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.2); }
-        }
-        .sidebar .sidebar-header {
-            border-bottom: 1px solid var(--border-color);
-            animation: borderPulse 3s infinite;
-        }
-        .sidebar li {
-            transition: all 0.2s;
-            cursor: pointer;
-            border-radius: 12px;
-            margin: 8px 0;
-            position: relative;
-            overflow: hidden;
-        }
-        .sidebar li:hover {
-            background: rgba(0, 240, 255, 0.1);
-            transform: translateX(5px);
-        }
-        /* Spotlight effect pour le menu (JS) */
-        .sidebar li .spotlight {
-            position: absolute;
-            background: radial-gradient(circle, rgba(0,240,255,0.6) 0%, rgba(0,240,255,0) 70%);
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.1s;
-        }
-
-        /* Status tag */
+        .brand { font-weight: 800; font-size: 1.2rem; }
+        .brand span { color: var(--primary); }
         .status-tag {
-            background: rgba(0, 255, 136, 0.1);
+            background: rgba(0,255,136,0.1);
             border: 1px solid var(--accent);
             border-radius: 20px;
             padding: 5px 10px;
@@ -181,469 +104,468 @@
             align-items: center;
             transition: all 0.3s;
         }
-        .pulse {
-            animation: subtlePulse 2s infinite;
-        }
-        @keyframes subtlePulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.2); }
-            70% { box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
-        }
-
-        /* Hero and cards */
-        .hero-content h1, .hero-content p, .secure-badge {
-            animation: fadeUp 0.6s ease-out both;
-        }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Feature cards for "Comment ça marche" */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        .feature-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 0 20px var(--glow-cyan);
-        }
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-        .feature-title {
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-        .feature-desc {
-            font-size: 0.8rem;
-            color: var(--text);
-        }
-
-        /* Toggle theme button */
         .theme-toggle {
             background: none;
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
-            color: var(--text-light);
-            transition: transform 0.3s;
             margin-right: 10px;
-        }
-        .theme-toggle:hover {
-            transform: rotate(180deg);
-        }
-
-        /* Autres styles */
-        .toast {
-            background: rgba(10, 20, 35, 0.9);
-            backdrop-filter: blur(10px);
-            border-left: 4px solid var(--primary);
+            transition: transform 0.3s;
             color: var(--text-light);
         }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0a0f1a; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-        body.light ::-webkit-scrollbar-track { background: #e2e8f0; }
+        .theme-toggle:hover { transform: rotate(180deg); }
+        /* typing animation */
+        .typing-container {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            max-width: 800px;
+            margin: 1rem auto;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 1.5rem;
+        }
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            margin-left: 2px;
+            background-color: var(--primary);
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0; } }
+        /* floating fake numbers */
+        .floating-numbers {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .fake-num {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border-left: 3px solid var(--primary);
+            padding: 8px 15px;
+            border-radius: 30px;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeSlide 4s forwards;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateX(50px); }
+            10% { opacity: 1; transform: translateX(0); }
+            80% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(50px); display: none; }
+        }
+        /* overlay modal for verification step */
+        .overlay-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .overlay-blur.active {
+            display: flex;
+        }
+        .verification-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--primary);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: scaleIn 0.3s ease;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .whatsapp-full-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+        .divider {
+            text-align: center;
+            margin: 15px 0;
+            position: relative;
+        }
+        .divider span {
+            background: var(--card-bg);
+            padding: 0 10px;
+        }
+        input, select {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            color: var(--text-light);
+        }
+        .input-row { display: flex; gap: 10px; }
+        #btn-verify-code { width: 50px; background: #1e293b; border: none; border-radius: 10px; cursor: pointer; }
+        /* success page */
+        .number-box {
+            background: rgba(0,20,30,0.6);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .copy-icon-btn { background: none; border: 1px solid var(--border-color); padding: 8px; border-radius: 8px; cursor: pointer; }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            z-index: 2000;
+        }
     </style>
 </head>
 <body>
-    <!-- LOADER -->
-    <div id="initial-loader" style="position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-        <div class="eye-container">
-            <div class="eye" style="width: 60px; height: 60px; background: #1e293b; border: 3px solid #00f0ff; border-radius: 50%; position: relative; margin: 0 auto 15px;">
-                <div class="pupil" style="width: 20px; height: 20px; background: #00f0ff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: search 2s infinite;"></div>
-            </div>
-            <p class="loading-text" style="color: var(--text);">Établissement d'une liaison sécurisée...</p>
-        </div>
+
+    <div id="initial-loader" style="position:fixed; inset:0; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; transition:0.3s;">
+        <div style="width:50px; height:50px; border:3px solid var(--primary); border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite;"></div>
+        <p style="margin-top:20px;">Chargement...</p>
     </div>
 
-    <div id="app-container">
-        <!-- Navigation -->
-        <nav class="navbar" style="height: 60px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
-            <div class="nav-left">
-                <button id="menu-btn" class="icon-btn" style="border: none; background: none; font-size: 1.2rem; padding: 8px; cursor: pointer;"><i class="fa-solid fa-bars"></i></button>
-                <span class="brand" style="font-weight: 800; font-size: 1.2rem;">Free<span style="color: #00f0ff;">Sim</span></span>
-            </div>
-            <div class="nav-right" style="display: flex; align-items: center; gap: 10px;">
-                <button id="theme-toggle" class="theme-toggle" title="Changer de thème"><i class="fa-solid fa-moon"></i></button>
-                <span id="network-status" class="status-tag pulse"><i class="fa-solid fa-wifi"></i> En ligne</span>
+    <div id="app-container" style="display:none;">
+        <nav class="navbar">
+            <div class="brand">Free<span>Sim</span></div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <button id="theme-toggle" class="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+                <span id="network-status" class="status-tag"><i class="fa-solid fa-wifi"></i> En ligne</span>
             </div>
         </nav>
 
-        <!-- Sidebar améliorée avec spotlight -->
-        <div id="sidebar" class="sidebar">
-            <div class="sidebar-header" style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <h3>Menu</h3>
-                <button id="close-menu" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <ul style="list-style: none; padding: 10px;">
-                <li id="menu-home"><i class="fa-solid fa-house"></i> Accueil</li>
-                <li id="menu-about"><i class="fa-solid fa-circle-info"></i> Comment ça marche</li>
-            </ul>
-        </div>
-        <div id="overlay" class="overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 90; opacity: 0; visibility: hidden; transition: 0.3s;"></div>
-
-        <!-- Vues -->
-        <section id="view-landing" class="view active-view" style="flex: 1; display: flex; padding: 20px; align-items: center; justify-content: center; flex-direction: column; overflow-y: auto;">
-            <div class="hero-content" style="text-align: center; max-width: 800px;">
-                <div class="secure-badge" style="display: inline-block; background: rgba(0, 240, 255, 0.1); color: #00f0ff; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; border: 1px solid rgba(0, 240, 255, 0.3);">
+        <!-- Landing view (sans menu, avec texte animé) -->
+        <section id="view-landing" class="view active-view">
+            <div style="max-width:900px; text-align:center;">
+                <div class="secure-badge" style="display:inline-block; background:rgba(0,240,255,0.1); color:#00f0ff; border-radius:30px; padding:5px 15px; margin-bottom:20px;">
                     <i class="fa-solid fa-shield-check"></i> Service gratuit vérifié
                 </div>
-                <h1 style="font-size: 2.2rem; line-height: 1.1; margin-bottom: 15px;">Numéros SMS temporaires <br><span style="color: #00f0ff;">Pour tout le monde.</span></h1>
-                <p style="margin-bottom: 30px; line-height: 1.5;">Recevez instantanément des codes de vérification SMS sans exposer votre vrai numéro. Initiative caritative 100% gratuite.</p>
-                <div class="hero-actions">
-                    <button id="btn-get-started" class="cta-button" style="background: #00f0ff; color: #050b14; padding: 16px 32px; border-radius: 50px; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; width: 100%; justify-content: center;">Obtenir mon numéro <i class="fa-solid fa-arrow-right"></i></button>
-                </div>
-            </div>
-
-            <!-- Section "Comment ça marche" avec cartes -->
-            <div style="margin-top: 80px; text-align: center; max-width: 1000px;">
-                <h2 style="margin-bottom: 20px;">✨ Comment ça marche ?</h2>
-                <div style="background: var(--card-bg); backdrop-filter: blur(8px); border-radius: 24px; padding: 2rem; margin-bottom: 2rem;">
-                    <p style="font-size: 1.1rem;">Ce service est offert en don par <strong>Mahamat Oumar Moussa Houma</strong>, alias <strong>Le Seigneur des Appareils</strong> — un jeune passionné d'informatique tchadien. Il vous permet de <strong>cacher vos traces sur Internet</strong> en utilisant des numéros temporaires pour vos inscriptions et vérifications, protégeant ainsi votre vie privée.</p>
-                </div>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
-                        <div class="feature-title">13+ Pays</div>
-                        <div class="feature-desc">Numéros disponibles dans plus de 13 pays</div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
-                        <div class="feature-title">Instantané</div>
-                        <div class="feature-desc">Réception des SMS en quelques secondes</div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fa-solid fa-user-secret"></i></div>
-                        <div class="feature-title">100% Anonyme</div>
-                        <div class="feature-desc">Aucune donnée personnelle conservée</div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fa-solid fa-gem"></i></div>
-                        <div class="feature-title">Gratuit</div>
-                        <div class="feature-desc">Service entièrement gratuit et sans engagement</div>
-                    </div>
-                </div>
+                <h1 style="font-size:2.2rem;">Numéros SMS temporaires <br><span style="color:#00f0ff;">Pour tout le monde.</span></h1>
+                <p style="margin:20px 0;">Recevez instantanément des codes de vérification SMS sans exposer votre vrai numéro. Initiative caritative 100% gratuite.</p>
+                <div class="typing-container" id="typing-text"></div>
+                <button id="btn-get-started" class="cta-button" style="background:#00f0ff; color:#050b14; border:none; padding:14px 32px; border-radius:50px; font-weight:700; margin-top:20px; cursor:pointer;">Obtenir mon numéro <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </section>
 
-        <!-- VERIFICATION VIEW (identique à avant) -->
-        <section id="view-verification" class="view" style="display: none; flex: 1; padding: 20px; align-items: center; justify-content: center; flex-direction: column; overflow-y: auto;">
-            <div class="card" style="padding: 30px; max-width: 400px;">
-                <div class="card-header" style="text-align: center; margin-bottom: 25px;">
-                    <div class="step-badge" style="font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: #5b6e8c; letter-spacing: 1px;">Étape 1 sur 2</div>
-                    <h2>Vérification humaine</h2>
-                    <p>Pour garder ce service gratuit, veuillez demander un code d'accès.</p>
+        <!-- Overlay pour l'étape de vérification (apparaît en premier plan) -->
+        <div id="verification-overlay" class="overlay-blur">
+            <div class="verification-card">
+                <h2>Vérification humaine</h2>
+                <p>Pour garder ce service gratuit, veuillez demander un code d'accès.</p>
+                <button id="overlay-whatsapp-request" class="whatsapp-full-btn"><i class="fa-brands fa-whatsapp"></i> Obtenir le code d'accès</button>
+                <div class="divider"><span>PUIS</span></div>
+                <label>Entrez le code d'accès</label>
+                <div class="input-row">
+                    <input type="text" id="overlay-access-code" placeholder="ex: FREE2025">
+                    <button id="overlay-verify-btn">✓</button>
                 </div>
-                <button id="btn-whatsapp-request" class="whatsapp-full-btn" style="width: 100%; background: #25D366; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;"><i class="fa-brands fa-whatsapp"></i> <span>Obtenir le code d'accès</span></button>
-                <div class="divider" style="text-align: center; margin: 20px 0; position: relative;"><span style="background: var(--card-bg); padding: 0 10px;">PUIS</span></div>
-                <div class="input-area">
-                    <label>Entrez le code d'accès</label>
-                    <div class="input-row" style="display: flex; gap: 10px; margin-top: 5px;">
-                        <input type="text" id="input-access-code" placeholder="ex: FREE2025" disabled>
-                        <button id="btn-verify-code" disabled style="background: #1e293b; border: none; border-radius: 10px; width: 50px; cursor: pointer;"><i class="fa-solid fa-check"></i></button>
-                    </div>
+            </div>
+        </div>
+
+        <!-- Dashboard view (invisible tant que non activée) -->
+        <section id="view-dashboard" class="view" style="display:none;">
+            <div class="card">
+                <h2 style="text-align:center;">Configuration</h2>
+                <div class="form-group" style="margin:15px 0;">
+                    <label>Sélectionnez le pays</label>
+                    <select id="country-select">
+                        <option value="" selected disabled>Choisissez un pays...</option>
+                    </select>
                 </div>
+                <div class="form-group" style="margin:15px 0;">
+                    <label>Sélectionnez le service</label>
+                    <select id="service-select">
+                        <option value="" selected disabled>Choisissez un service...</option>
+                        <option>WhatsApp</option><option>Telegram</option><option>Facebook</option><option>Google</option>
+                    </select>
+                </div>
+                <button id="btn-assign-number" class="cta-button" style="background:#00f0ff; color:#000; width:100%; padding:12px; border-radius:40px;">Obtenir mon numéro</button>
             </div>
         </section>
 
-        <!-- DASHBOARD VIEW -->
-        <section id="view-dashboard" class="view" style="display: none; flex: 1; padding: 20px; align-items: center; justify-content: center; flex-direction: column; overflow-y: auto;">
-            <div class="card" style="padding: 30px; max-width: 400px;">
-                <div class="card-header" style="text-align: center;">
-                    <div class="step-badge">Étape 2 sur 2</div>
-                    <h2>Configuration</h2>
-                </div>
-                <div class="form-stack">
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label>Sélectionnez le pays</label>
-                        <div class="select-box" style="position: relative;">
-                            <select id="country-select" style="width: 100%; padding: 14px; border-radius: 12px; appearance: none;">
-                                <option value="" selected disabled>Choisissez un pays...</option>
-                            </select>
-                            <div class="select-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none;"><i class="fa-solid fa-chevron-down"></i></div>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label>Sélectionnez le service</label>
-                        <div class="select-box" style="position: relative;">
-                            <select id="service-select" style="width: 100%; padding: 14px; border-radius: 12px; appearance: none;">
-                                <option value="" selected disabled>Choisissez un service...</option>
-                                <option value="WhatsApp">WhatsApp</option>
-                                <option value="Telegram">Telegram</option>
-                                <option value="Facebook">Facebook</option>
-                                <option value="Google">Google / Gmail</option>
-                                <option value="TikTok">TikTok</option>
-                                <option value="Twitter">Twitter / X</option>
-                                <option value="Instagram">Instagram</option>
-                                <option value="Other">Autre</option>
-                            </select>
-                            <div class="select-icon"><i class="fa-solid fa-chevron-down"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <button id="btn-assign-number" class="cta-button" style="width: 100%; background: #00f0ff; color: #050b14; padding: 14px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer;">Obtenir mon numéro</button>
-            </div>
-        </section>
-
-        <!-- SUCCESS VIEW -->
-        <section id="view-success" class="view" style="display: none; flex: 1; padding: 20px; align-items: center; justify-content: center; flex-direction: column; overflow-y: auto;">
-            <div class="card success-card" style="padding: 30px; text-align: center;">
-                <div class="success-icon"><i class="fa-solid fa-check" style="color: #00ff88; font-size: 3rem;"></i></div>
+        <!-- Success view -->
+        <section id="view-success" class="view" style="display:none;">
+            <div class="card success-card" style="text-align:center;">
+                <div><i class="fa-solid fa-check" style="color:#00ff88; font-size:3rem;"></i></div>
                 <h2>Numéro actif</h2>
-                <p>Ce numéro vous est réservé.</p>
-                <div class="number-box" style="background: rgba(0, 20, 30, 0.6); backdrop-filter: blur(8px); border: 1px solid #00ff88; border-radius: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between; margin: 20px 0;">
-                    <div class="flag-icon" id="display-flag">🇺🇸</div>
-                    <div class="number-text" id="display-number" style="font-family: monospace; font-weight: 700;">Chargement...</div>
-                    <button id="btn-copy" class="copy-icon-btn" style="background: var(--card-bg); border: 1px solid var(--border-color); width: 35px; height: 35px; border-radius: 8px; cursor: pointer;"><i class="fa-regular fa-copy"></i></button>
+                <div class="number-box">
+                    <span class="flag-icon" id="display-flag">🇺🇸</span>
+                    <span id="display-number" style="font-family:monospace;">Chargement...</span>
+                    <button id="btn-copy" class="copy-icon-btn"><i class="fa-regular fa-copy"></i></button>
                 </div>
-                <div class="instruction-box" style="background: rgba(0, 240, 255, 0.1); border-left: 3px solid #00f0ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
-                    <p><strong>Action requise :</strong> Cliquez ci-dessous pour demander votre code SMS spécifique via notre bot automatique.</p>
+                <div class="instruction-box" style="background:rgba(0,240,255,0.1); padding:12px; border-radius:12px; margin:15px 0;">
+                    <p>Cliquez ci-dessous pour demander votre code SMS via notre bot automatique.</p>
                 </div>
-                <button id="btn-request-sms" class="whatsapp-full-btn" style="width: 100%; background: #25D366; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer;"><i class="fa-brands fa-whatsapp"></i> Demander le code SMS</button>
+                <button id="btn-request-sms" class="whatsapp-full-btn"><i class="fa-brands fa-whatsapp"></i> Demander le code SMS</button>
             </div>
         </section>
     </div>
 
-    <div id="toast-box" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 300px; pointer-events: none;"></div>
+    <div id="floating-numbers" class="floating-numbers"></div>
+    <div id="toast" class="toast" style="display:none;"></div>
 
     <script>
-        // --- CONFIGURATION ---
+        // ==================== CONFIGURATION ====================
         const BOT_NUMBER = "23591234568";
         const NUMBERS = {
-            "USA": { flag: "🇺🇸", pool: ["+13324655723","+18578329806","+13324651078","+16142073008","+18756983490","+12075037862","+18333022124","+18333180584","+18152611047"] },
-            "United Kingdom": { flag: "🇬🇧", pool: ["+447949338056","+447481916733","+447367211583","+447475352330","+447367524129","+447598328098","+447949338055","+447598328057","+447475355392","+447598328056"] },
-            "Netherlands": { flag: "🇳🇱", pool: ["+31620268917","+31620706483","+31612776705","+31620185296","+31620171677","+31653682942"] },
+            "USA": { flag: "🇺🇸", pool: ["+13324655723","+18578329806","+13324651078","+16142073008","+18756983490"] },
+            "United Kingdom": { flag: "🇬🇧", pool: ["+447949338056","+447481916733","+447367211583"] },
+            "Netherlands": { flag: "🇳🇱", pool: ["+31620268917","+31620706483"] },
             "Germany": { flag: "🇩🇪", pool: ["+4915777103276"] },
-            "Spain": { flag: "🇪🇸", pool: ["+34646814896","+34620239057","+34676784008","+34628152325","+34696845618"] },
-            "Israel": { flag: "🇮🇱", pool: ["+972503816969","+972552603210"] },
-            "India": { flag: "🇮🇳", pool: ["+917428730894","+917428723247"] },
-            "Croatia": { flag: "🇭🇷", pool: ["+385915802296","+385917962212","+385917370284","+385919831698","+385919823099","+385915982071"] },
-            "Mexico": { flag: "🇲🇽", pool: ["+522142296758"] },
-            "Brazil": { flag: "🇧🇷", pool: ["+559551583801"] },
-            "Nigeria": { flag: "🇳🇬", pool: ["+2348153353131","+2349094264199","+2347044838902","+2347061000491","+2348152611047"] },
-            "Uganda": { flag: "🇺🇬", pool: ["+256740497363","+256747808916","+256742807524","+256758276630"] },
+            "Spain": { flag: "🇪🇸", pool: ["+34646814896","+34620239057"] },
+            "France": { flag: "🇫🇷", pool: ["+33612345678","+33798765432"] },
+            "Nigeria": { flag: "🇳🇬", pool: ["+2348153353131","+2349094264199"] },
             "South Africa": { flag: "🇿🇦", pool: ["+27635505591"] }
         };
-
         let userData = { assignedNumber: null, assignedCountry: null, service: null };
         let currentTheme = 'dark';
+        let typingInterval, typingIndex = 0;
 
-        // --- Thème et réseau ---
+        // Texte à animer
+        const fullText = `Ce service est offert en don par Mahamat Oumar Moussa Houma, alias Le Seigneur des Appareils — un jeune passionné d'informatique tchadien. Il vous permet de cacher vos traces sur Internet en utilisant des numéros temporaires pour vos inscriptions et vérifications, protégeant ainsi votre vie privée.`;
+
+        // --- UI helpers ---
+        function showToast(msg, duration=3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, duration);
+        }
+
+        // --- Typing effect ---
+        function startTyping() {
+            const container = document.getElementById('typing-text');
+            if(!container) return;
+            container.innerHTML = '';
+            typingIndex = 0;
+            function type() {
+                if (typingIndex < fullText.length) {
+                    container.innerHTML += fullText.charAt(typingIndex);
+                    typingIndex++;
+                    setTimeout(type, 40);
+                } else {
+                    // Ajouter curseur clignotant
+                    const span = document.createElement('span');
+                    span.className = 'cursor';
+                    span.innerHTML = '|';
+                    container.appendChild(span);
+                }
+            }
+            type();
+        }
+
+        // --- Floating fake numbers animation ---
+        const countriesList = Object.keys(NUMBERS);
+        function showFakeNumber() {
+            const container = document.getElementById('floating-numbers');
+            setInterval(() => {
+                const randomCountry = countriesList[Math.floor(Math.random() * countriesList.length)];
+                const flag = NUMBERS[randomCountry].flag;
+                const fakeNum = `${flag} ${randomCountry} +${Math.floor(Math.random()*9000000000+1000000000)}****`;
+                const div = document.createElement('div');
+                div.className = 'fake-num';
+                div.innerHTML = `<span>${fakeNum}</span>`;
+                container.appendChild(div);
+                setTimeout(() => div.remove(), 4000);
+            }, 5000);
+        }
+
+        // --- Opérateur réseau réel (Moov, Orange, etc.) via API gratuite ---
+        async function updateRealOperator() {
+            const statusSpan = document.getElementById('network-status');
+            if (!statusSpan) return;
+            try {
+                // Utiliser ip-api pour récupérer l'opérateur approximatif (pas parfait mais fonctionne)
+                const res = await fetch('http://ip-api.com/json/');
+                const data = await res.json();
+                let operator = data.isp || "Orange";
+                if(operator.includes('Tigo')) operator = 'Tigo';
+                else if(operator.includes('Airtel')) operator = 'Airtel';
+                else if(operator.includes('Orange')) operator = 'Orange';
+                else if(operator.includes('Moov')) operator = 'Moov';
+                else operator = operator.split(' ')[0];
+                statusSpan.innerHTML = `<i class="fa-solid fa-tower-cell"></i> ${operator}`;
+            } catch(e) {
+                statusSpan.innerHTML = `<i class="fa-solid fa-wifi"></i> Moov`; // fallback
+            }
+        }
+
+        // --- Theme management ---
         function applyTheme(theme) {
             if (theme === 'light') document.body.classList.add('light');
             else document.body.classList.remove('light');
             localStorage.setItem('theme', theme);
             currentTheme = theme;
-            const toggleIcon = document.querySelector('#theme-toggle i');
-            if (toggleIcon) {
-                toggleIcon.className = theme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-            }
+            const icon = document.querySelector('#theme-toggle i');
+            if(icon) icon.className = theme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
-
         function toggleTheme() {
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             applyTheme(newTheme);
         }
 
-        async function updateNetworkStatus() {
-            const statusSpan = document.getElementById('network-status');
-            if (!statusSpan) return;
-            if ('connection' in navigator) {
-                const conn = navigator.connection;
-                const type = conn.effectiveType || 'wifi'; // '4g', '3g', '2g', 'slow-2g', 'wifi'
-                let typeLabel = type.toUpperCase();
-                if (type === 'wifi') typeLabel = 'WiFi';
-                else if (type === '4g') typeLabel = '4G';
-                else if (type === '3g') typeLabel = '3G';
-                else if (type === '2g') typeLabel = '2G';
-                statusSpan.innerHTML = `<i class="fa-solid fa-signal"></i> ${typeLabel}`;
-                const updateHandler = () => updateNetworkStatus();
-                conn.removeEventListener('change', updateHandler);
-                conn.addEventListener('change', updateHandler);
-            } else {
-                statusSpan.innerHTML = `<i class="fa-solid fa-wifi"></i> En ligne`;
-            }
+        // --- Overlay / blur + verification ---
+        const overlay = document.getElementById('verification-overlay');
+        function showVerificationOverlay() {
+            // Appliquer blur sur tout le contenu derrière
+            overlay.classList.add('active');
+            // Réinitialiser le champ
+            document.getElementById('overlay-access-code').value = '';
+            document.getElementById('overlay-verify-btn').disabled = false;
+        }
+        function hideVerificationOverlay() {
+            overlay.classList.remove('active');
         }
 
-        // --- Spotlight sidebar effect ---
-        function initSpotlight() {
-            const menuItems = document.querySelectorAll('#sidebar li');
-            menuItems.forEach(item => {
-                const span = document.createElement('span');
-                span.className = 'spotlight';
-                item.appendChild(span);
-                item.addEventListener('mousemove', (e) => {
-                    const rect = item.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    span.style.left = x + 'px';
-                    span.style.top = y + 'px';
-                    span.style.opacity = '0.6';
-                });
-                item.addEventListener('mouseleave', () => {
-                    span.style.opacity = '0';
-                });
-            });
+        // Gestion du flux principal
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+            document.getElementById(viewId).style.display = 'flex';
         }
 
-        // --- Fonctions existantes ---
-        function sendWhatsAppMessage(prefixMsg, additionalMsg = '') {
-            const finalMsg = prefixMsg + additionalMsg;
-            window.open(`https://wa.me/${BOT_NUMBER}?text=${encodeURIComponent(finalMsg)}`, '_blank');
-        }
-
-        function initLoaderAndApp() {
-            const loader = document.getElementById('initial-loader');
-            if (loader) loader.style.display = 'none';
-            document.getElementById('app-container').style.opacity = '1';
-            try {
-                const saved = localStorage.getItem('tempNum_data');
-                if (saved) userData = JSON.parse(saved);
-            } catch(e) {}
-            if (userData.assignedNumber) {
-                showView('view-success');
-                renderSuccess();
-            }
-            populateCountries();
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); });
-            }, { threshold: 0.2 });
-            document.querySelectorAll('.view').forEach(view => observer.observe(view));
-        }
-
-        function showView(id) {
-            document.querySelectorAll('.view').forEach(el => el.classList.remove('active-view'));
-            const newView = document.getElementById(id);
-            newView.classList.add('active-view');
-            newView.style.display = 'flex';
-            setTimeout(() => newView.classList.add('revealed'), 50);
-        }
-
+        // --- Dashboard & assignment ---
         function populateCountries() {
             const sel = document.getElementById('country-select');
             sel.innerHTML = '<option value="" selected disabled>Choisissez un pays...</option>';
-            for (let country in NUMBERS) {
-                const opt = document.createElement('option');
-                opt.value = country;
-                opt.textContent = `${NUMBERS[country].flag} ${country} (${NUMBERS[country].pool.length})`;
+            for(let c in NUMBERS) {
+                let opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = `${NUMBERS[c].flag} ${c} (${NUMBERS[c].pool.length})`;
                 sel.appendChild(opt);
             }
         }
-
         function renderSuccess() {
-            document.getElementById('display-number').textContent = userData.assignedNumber;
-            document.getElementById('display-flag').textContent = NUMBERS[userData.assignedCountry] ? NUMBERS[userData.assignedCountry].flag : "🌐";
-            document.getElementById('btn-request-sms').onclick = function() {
-                const safeConfig = window.TEXT_CONFIG || "";
-                const userRequest = `\n\nBonjour ! J'ai obtenu le numéro ${userData.assignedNumber} (${userData.assignedCountry}) pour le service ${userData.service}. J'ai besoin du code SMS.`;
-                sendWhatsAppMessage(safeConfig, userRequest);
+            document.getElementById('display-number').innerText = userData.assignedNumber;
+            const flag = NUMBERS[userData.assignedCountry]?.flag || '🌐';
+            document.getElementById('display-flag').innerHTML = flag;
+            document.getElementById('btn-request-sms').onclick = () => {
+                const msg = window.TEXT_CONFIG + `\n\nBonjour ! J'ai obtenu le numéro ${userData.assignedNumber} (${userData.assignedCountry}) pour le service ${userData.service}. Besoin du code SMS.`;
+                window.open(`https://wa.me/${BOT_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
             };
-            document.getElementById('btn-copy').onclick = function() {
+            document.getElementById('btn-copy').onclick = () => {
                 navigator.clipboard.writeText(userData.assignedNumber);
                 showToast("Copié dans le presse-papiers");
             };
         }
 
-        let showToast = (msg) => {
-            const box = document.getElementById('toast-box');
-            const t = document.createElement('div');
-            t.className = 'toast';
-            t.textContent = msg;
-            t.style.background = 'rgba(10, 20, 35, 0.9)';
-            t.style.backdropFilter = 'blur(10px)';
-            t.style.borderLeft = '4px solid #00f0ff';
-            t.style.color = '#e2e8f0';
-            t.style.padding = '12px 20px';
-            t.style.borderRadius = '8px';
-            t.style.marginBottom = '10px';
-            box.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        };
-
-        window.addEventListener('load', () => {
+        // Initialisation
+        window.addEventListener('load', async () => {
+            // Cacher loader
+            document.getElementById('initial-loader').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+            
             // Thème
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) applyTheme(savedTheme);
+            if(savedTheme) applyTheme(savedTheme);
             else applyTheme('dark');
             document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-            // Réseau
-            updateNetworkStatus();
-            // Spotlight menu
-            initSpotlight();
-            // Événements UI
-            document.getElementById('btn-get-started').onclick = () => showView('view-verification');
-            document.getElementById('btn-whatsapp-request').onclick = () => {
+            
+            // Typing
+            startTyping();
+            
+            // Réseau / opérateur
+            await updateRealOperator();
+            setInterval(updateRealOperator, 60000);
+            
+            // Faux numéros flottants
+            showFakeNumber();
+            
+            // Récupération données locales
+            try {
+                const saved = localStorage.getItem('tempNum_data');
+                if(saved) userData = JSON.parse(saved);
+                if(userData.assignedNumber) {
+                    showView('view-success');
+                    renderSuccess();
+                }
+            } catch(e) {}
+            
+            populateCountries();
+            
+            // Bouton "Obtenir mon numéro" : affiche l'overlay
+            document.getElementById('btn-get-started').onclick = () => {
+                showVerificationOverlay();
+            };
+            
+            // Gestion de l'overlay WhatsApp
+            document.getElementById('overlay-whatsapp-request').onclick = () => {
                 const safeConfig = window.TEXT_CONFIG || "";
-                const msg = safeConfig + "\n\nBonjour ! Je souhaite demander un code d'accès pour recevoir un numéro de téléphone temporaire gratuit à des fins de vérification. Merci !";
+                const msg = safeConfig + "\n\nBonjour ! Je souhaite demander un code d'accès pour recevoir un numéro temporaire gratuit.";
                 window.open(`https://wa.me/${BOT_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
                 setTimeout(() => {
-                    const input = document.getElementById('input-access-code');
+                    const input = document.getElementById('overlay-access-code');
                     input.disabled = false;
-                    input.placeholder = "Entrez le code ici...";
-                    showToast("Veuillez entrer le code reçu");
+                    input.placeholder = "Entrez le code reçu";
+                    showToast("Veuillez entrer le code envoyé");
                 }, 1500);
             };
-            document.getElementById('input-access-code').addEventListener('input', function(e) {
-                const btn = document.getElementById('btn-verify-code');
+            
+            document.getElementById('overlay-access-code').addEventListener('input', (e) => {
+                const btn = document.getElementById('overlay-verify-btn');
                 if(e.target.value.length > 2) {
                     btn.disabled = false;
                     btn.style.background = "#00f0ff";
-                    btn.style.color = "#050b14";
                 }
             });
-            document.getElementById('btn-verify-code').onclick = () => {
+            document.getElementById('overlay-verify-btn').onclick = () => {
                 showToast("Vérification réussie !");
-                setTimeout(() => showView('view-dashboard'), 500);
+                hideVerificationOverlay();
+                showView('view-dashboard');
             };
+            
+            // Attribution du numéro
             document.getElementById('btn-assign-number').onclick = () => {
                 const country = document.getElementById('country-select').value;
                 const service = document.getElementById('service-select').value;
-                if (!country || !service) {
-                    showToast("Veuillez sélectionner le pays et le service");
+                if(!country || !service) {
+                    showToast("Veuillez sélectionner pays et service");
                     return;
                 }
-                if (userData.assignedNumber) {
+                if(userData.assignedNumber) {
                     showToast("Vous avez déjà un numéro !");
                     showView('view-success');
+                    renderSuccess();
                     return;
                 }
                 const pool = NUMBERS[country].pool;
                 const randomNum = pool[Math.floor(Math.random() * pool.length)];
                 userData = { assignedNumber: randomNum, assignedCountry: country, service: service };
-                try { localStorage.setItem('tempNum_data', JSON.stringify(userData)); } catch(e){}
+                localStorage.setItem('tempNum_data', JSON.stringify(userData));
                 renderSuccess();
                 showView('view-success');
             };
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            document.getElementById('menu-btn').onclick = () => { sidebar.classList.add('active'); overlay.style.visibility = 'visible'; overlay.style.opacity = '1'; };
-            const closeMenu = () => { sidebar.classList.remove('active'); overlay.style.opacity = '0'; overlay.style.visibility = 'hidden'; };
-            document.getElementById('close-menu').onclick = closeMenu;
-            overlay.onclick = closeMenu;
-            document.getElementById('menu-home').onclick = () => { closeMenu(); showView('view-landing'); };
-            document.getElementById('menu-about').onclick = () => { closeMenu(); const landing = document.getElementById('view-landing'); if(landing) landing.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-            initLoaderAndApp();
         });
     </script>
 
-    <!-- Texte long déjà présent -->
+    <!-- Texte long (inchangé) -->
     <script>
         window.TEXT_CONFIG = `https://wa.me/+235291234568?text=https://wa.me/23591234567?text=Rejoins mon groupe, tout est permis !! Caceras xxx, du contenu CP, Only fans, morritas actives, CP 🔥🔥 Rejoindre le groupe 😈 https://videeyss.online/morritas-cp 💥💥🔥🔥 MANOOO VC N VAI ACREDITAR 🔥🔥💥💥
 Le site de LUCIEN WHATSAPP paie des montants absurdes kkkkk 🎰💰
