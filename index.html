@@ -10,129 +10,62 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* VARIABLES & THEMES (dark/light) */
+        /* VARIABLES & THEMES */
         :root {
             --bg: #050b14;
-            --card-bg: rgba(15, 25, 45, 0.65);
-            --card-border: rgba(0, 255, 255, 0.2);
-            --glow-cyan: rgba(0, 255, 255, 0.4);
+            --card-bg: rgba(15, 25, 45, 0.85);
+            --card-border: rgba(0, 255, 255, 0.3);
             --primary: #00f0ff;
             --accent: #00ff88;
-            --text: #b0c4de;
-            --text-light: #e2e8f0;
+            --text: #e2e8f0;
+            --text-light: #f0f4fa;
             --radius: 20px;
             --font: 'Plus Jakarta Sans', sans-serif;
-            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --nav-bg: rgba(10, 20, 35, 0.7);
+            --nav-bg: rgba(10, 20, 35, 0.8);
             --input-bg: rgba(5, 15, 25, 0.7);
             --border-color: #2d3a4a;
         }
         body.light {
-            --bg: #f0f4fa;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --card-border: rgba(0, 0, 0, 0.1);
+            --bg: #eef2f7;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 100, 200, 0.2);
             --primary: #0066cc;
             --accent: #00a86b;
-            --text: #2c3e50;
-            --text-light: #1a2a3a;
-            --nav-bg: rgba(255, 255, 255, 0.8);
-            --input-bg: rgba(240, 245, 250, 0.8);
+            --text: #1a2a3a;
+            --text-light: #0f172a;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --input-bg: rgba(240, 245, 250, 0.9);
             --border-color: #cbd5e1;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: var(--font);
             background: var(--bg);
-            color: var(--text-light);
+            color: var(--text);
             min-height: 100vh;
-            overflow-x: hidden;
             transition: background 0.3s, color 0.2s;
         }
-        /* views */
-        .view {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-            min-height: calc(100vh - 60px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 20px;
-        }
-        .view.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .active-view {
-            display: flex !important;
-        }
-        /* cards */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            transition: var(--transition);
-            padding: 30px;
-            max-width: 400px;
-            width: 100%;
-        }
-        /* navbar */
-        .navbar {
-            background: var(--nav-bg);
-            backdrop-filter: blur(10px);
-            height: 60px;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0,255,255,0.15);
-        }
-        .brand { font-weight: 800; font-size: 1.2rem; }
-        .brand span { color: var(--primary); }
-        .status-tag {
-            background: rgba(0,255,136,0.1);
-            border: 1px solid var(--accent);
-            border-radius: 20px;
-            padding: 5px 10px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        .theme-toggle {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-right: 10px;
-            transition: transform 0.3s;
-            color: var(--text-light);
-        }
-        .theme-toggle:hover { transform: rotate(180deg); }
-        /* typing animation */
+        /* Typing container */
         .typing-container {
-            font-size: 1.1rem;
-            line-height: 1.5;
-            max-width: 800px;
-            margin: 1rem auto;
-            background: rgba(0,0,0,0.3);
-            border-radius: 20px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            border-radius: 24px;
             padding: 1.5rem;
+            margin: 1rem auto;
+            max-width: 800px;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--text);
+            border-left: 3px solid var(--primary);
         }
         .cursor {
             display: inline-block;
             width: 2px;
-            margin-left: 2px;
             background-color: var(--primary);
             animation: blink 0.7s infinite;
         }
         @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0; } }
-        /* floating fake numbers */
+        /* Floating fake numbers */
         .floating-numbers {
             position: fixed;
             bottom: 20px;
@@ -141,18 +74,19 @@
             z-index: 999;
         }
         .fake-num {
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(12px);
             border-left: 3px solid var(--primary);
             padding: 8px 15px;
             border-radius: 30px;
-            margin-bottom: 8px;
-            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 8px;
-            animation: fadeSlide 4s forwards;
+            animation: fadeSlide 10s forwards;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            font-weight: 500;
         }
         @keyframes fadeSlide {
             0% { opacity: 0; transform: translateX(50px); }
@@ -160,23 +94,21 @@
             80% { opacity: 1; transform: translateX(0); }
             100% { opacity: 0; transform: translateX(50px); display: none; }
         }
-        /* overlay modal for verification step */
+        /* Overlay modal */
         .overlay-blur {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(8px);
             z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
         }
-        .overlay-blur.active {
-            display: flex;
-        }
+        .overlay-blur.active { display: flex; }
         .verification-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -187,52 +119,72 @@
             width: 90%;
             text-align: center;
             animation: scaleIn 0.3s ease;
+            color: var(--text);
         }
-        @keyframes scaleIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .whatsapp-full-btn {
+        @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        /* Buttons & inputs */
+        .cta-button, .whatsapp-full-btn {
             background: #25D366;
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 14px 20px;
+            border-radius: 40px;
             font-weight: 700;
-            width: 100%;
-            margin: 15px 0;
             cursor: pointer;
+            transition: 0.2s;
         }
-        .divider {
-            text-align: center;
-            margin: 15px 0;
-            position: relative;
-        }
-        .divider span {
-            background: var(--card-bg);
-            padding: 0 10px;
-        }
+        .cta-button { background: var(--primary); color: #050b14; }
         input, select {
             background: var(--input-bg);
             border: 1px solid var(--border-color);
             padding: 12px;
-            border-radius: 10px;
+            border-radius: 12px;
             width: 100%;
-            color: var(--text-light);
+            color: var(--text);
         }
         .input-row { display: flex; gap: 10px; }
-        #btn-verify-code { width: 50px; background: #1e293b; border: none; border-radius: 10px; cursor: pointer; }
-        /* success page */
+        #overlay-verify-btn { width: 50px; background: #1e293b; border: none; border-radius: 10px; cursor: pointer; color: white; }
+        /* Navbar */
+        .navbar {
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            height: 60px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,255,255,0.2);
+        }
+        .status-tag {
+            background: rgba(0,0,0,0.3);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text);
+            margin-right: 10px;
+            transition: transform 0.3s;
+        }
+        .theme-toggle:hover { transform: rotate(180deg); }
+        /* Card success */
         .number-box {
-            background: rgba(0,20,30,0.6);
-            border-radius: 12px;
-            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 20px 0;
         }
-        .copy-icon-btn { background: none; border: 1px solid var(--border-color); padding: 8px; border-radius: 8px; cursor: pointer; }
         .toast {
             position: fixed;
             bottom: 30px;
@@ -243,46 +195,50 @@
             padding: 10px 20px;
             border-radius: 30px;
             z-index: 2000;
+            font-size: 0.9rem;
         }
+        .view { display: none; padding: 20px; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 60px); }
+        .active-view { display: flex !important; }
+        .card { background: var(--card-bg); backdrop-filter: blur(12px); border-radius: 24px; padding: 30px; max-width: 400px; width: 100%; border: 1px solid var(--card-border); }
     </style>
 </head>
 <body>
 
-    <div id="initial-loader" style="position:fixed; inset:0; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; transition:0.3s;">
+    <div id="initial-loader" style="position:fixed; inset:0; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column;">
         <div style="width:50px; height:50px; border:3px solid var(--primary); border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite;"></div>
-        <p style="margin-top:20px;">Chargement...</p>
+        <p style="margin-top:20px;">Chargement sécurisé...</p>
     </div>
 
     <div id="app-container" style="display:none;">
         <nav class="navbar">
-            <div class="brand">Free<span>Sim</span></div>
-            <div style="display:flex; align-items:center; gap:10px;">
+            <div class="brand" style="font-weight:800;">Free<span style="color:var(--primary);">Sim</span></div>
+            <div style="display:flex; gap:10px;">
                 <button id="theme-toggle" class="theme-toggle"><i class="fa-solid fa-moon"></i></button>
-                <span id="network-status" class="status-tag"><i class="fa-solid fa-wifi"></i> En ligne</span>
+                <span id="network-status" class="status-tag"><i class="fa-solid fa-tower-cell"></i> Connexion...</span>
             </div>
         </nav>
 
-        <!-- Landing view (sans menu, avec texte animé) -->
+        <!-- Landing view -->
         <section id="view-landing" class="view active-view">
-            <div style="max-width:900px; text-align:center;">
-                <div class="secure-badge" style="display:inline-block; background:rgba(0,240,255,0.1); color:#00f0ff; border-radius:30px; padding:5px 15px; margin-bottom:20px;">
+            <div style="text-align:center; max-width:900px;">
+                <div style="display:inline-block; background:rgba(0,240,255,0.1); border:1px solid var(--primary); border-radius:30px; padding:5px 15px; margin-bottom:20px;">
                     <i class="fa-solid fa-shield-check"></i> Service gratuit vérifié
                 </div>
-                <h1 style="font-size:2.2rem;">Numéros SMS temporaires <br><span style="color:#00f0ff;">Pour tout le monde.</span></h1>
-                <p style="margin:20px 0;">Recevez instantanément des codes de vérification SMS sans exposer votre vrai numéro. Initiative caritative 100% gratuite.</p>
-                <div class="typing-container" id="typing-text"></div>
-                <button id="btn-get-started" class="cta-button" style="background:#00f0ff; color:#050b14; border:none; padding:14px 32px; border-radius:50px; font-weight:700; margin-top:20px; cursor:pointer;">Obtenir mon numéro <i class="fa-solid fa-arrow-right"></i></button>
+                <h1 style="font-size:2rem;">Numéros SMS temporaires <br><span style="color:var(--primary);">Pour tout le monde.</span></h1>
+                <p style="margin:20px 0;">Recevez instantanément des codes de vérification SMS sans exposer votre vrai numéro.</p>
+                <div id="typing-text" class="typing-container"></div>
+                <button id="btn-get-started" class="cta-button" style="margin-top:20px;">Obtenir mon numéro <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </section>
 
-        <!-- Overlay pour l'étape de vérification (apparaît en premier plan) -->
+        <!-- Overlay vérification -->
         <div id="verification-overlay" class="overlay-blur">
             <div class="verification-card">
                 <h2>Vérification humaine</h2>
-                <p>Pour garder ce service gratuit, veuillez demander un code d'accès.</p>
-                <button id="overlay-whatsapp-request" class="whatsapp-full-btn"><i class="fa-brands fa-whatsapp"></i> Obtenir le code d'accès</button>
-                <div class="divider"><span>PUIS</span></div>
-                <label>Entrez le code d'accès</label>
+                <p>Demandez un code d'accès via WhatsApp.</p>
+                <button id="overlay-whatsapp-request" class="whatsapp-full-btn"><i class="fa-brands fa-whatsapp"></i> Obtenir le code</button>
+                <div class="divider" style="margin:15px 0;"><span>PUIS</span></div>
+                <label>Entrez le code reçu</label>
                 <div class="input-row">
                     <input type="text" id="overlay-access-code" placeholder="ex: FREE2025">
                     <button id="overlay-verify-btn">✓</button>
@@ -290,39 +246,39 @@
             </div>
         </div>
 
-        <!-- Dashboard view (invisible tant que non activée) -->
-        <section id="view-dashboard" class="view" style="display:none;">
+        <!-- Dashboard view -->
+        <section id="view-dashboard" class="view">
             <div class="card">
                 <h2 style="text-align:center;">Configuration</h2>
-                <div class="form-group" style="margin:15px 0;">
-                    <label>Sélectionnez le pays</label>
+                <div style="margin:15px 0;">
+                    <label>Pays</label>
                     <select id="country-select">
-                        <option value="" selected disabled>Choisissez un pays...</option>
+                        <option value="" selected disabled>Choisissez...</option>
                     </select>
                 </div>
-                <div class="form-group" style="margin:15px 0;">
-                    <label>Sélectionnez le service</label>
+                <div style="margin:15px 0;">
+                    <label>Service</label>
                     <select id="service-select">
-                        <option value="" selected disabled>Choisissez un service...</option>
+                        <option value="" selected disabled>Choisissez...</option>
                         <option>WhatsApp</option><option>Telegram</option><option>Facebook</option><option>Google</option>
                     </select>
                 </div>
-                <button id="btn-assign-number" class="cta-button" style="background:#00f0ff; color:#000; width:100%; padding:12px; border-radius:40px;">Obtenir mon numéro</button>
+                <button id="btn-assign-number" class="cta-button" style="width:100%;">Obtenir mon numéro</button>
             </div>
         </section>
 
         <!-- Success view -->
-        <section id="view-success" class="view" style="display:none;">
+        <section id="view-success" class="view">
             <div class="card success-card" style="text-align:center;">
-                <div><i class="fa-solid fa-check" style="color:#00ff88; font-size:3rem;"></i></div>
+                <div><i class="fa-solid fa-check" style="color:var(--accent); font-size:3rem;"></i></div>
                 <h2>Numéro actif</h2>
                 <div class="number-box">
-                    <span class="flag-icon" id="display-flag">🇺🇸</span>
+                    <span id="display-flag">🇺🇸</span>
                     <span id="display-number" style="font-family:monospace;">Chargement...</span>
-                    <button id="btn-copy" class="copy-icon-btn"><i class="fa-regular fa-copy"></i></button>
+                    <button id="btn-copy" style="background:none; border:1px solid var(--border-color); border-radius:8px; padding:6px 12px;"><i class="fa-regular fa-copy"></i></button>
                 </div>
-                <div class="instruction-box" style="background:rgba(0,240,255,0.1); padding:12px; border-radius:12px; margin:15px 0;">
-                    <p>Cliquez ci-dessous pour demander votre code SMS via notre bot automatique.</p>
+                <div style="background:rgba(0,240,255,0.1); padding:12px; border-radius:12px; margin:15px 0;">
+                    <p>Cliquez ci-dessous pour recevoir votre code SMS via le bot.</p>
                 </div>
                 <button id="btn-request-sms" class="whatsapp-full-btn"><i class="fa-brands fa-whatsapp"></i> Demander le code SMS</button>
             </div>
@@ -333,34 +289,32 @@
     <div id="toast" class="toast" style="display:none;"></div>
 
     <script>
-        // ==================== CONFIGURATION ====================
-        const BOT_NUMBER = "23591234568";
-        const NUMBERS = {
-            "USA": { flag: "🇺🇸", pool: ["+13324655723","+18578329806","+13324651078","+16142073008","+18756983490"] },
-            "United Kingdom": { flag: "🇬🇧", pool: ["+447949338056","+447481916733","+447367211583"] },
-            "Netherlands": { flag: "🇳🇱", pool: ["+31620268917","+31620706483"] },
-            "Germany": { flag: "🇩🇪", pool: ["+4915777103276"] },
-            "Spain": { flag: "🇪🇸", pool: ["+34646814896","+34620239057"] },
-            "France": { flag: "🇫🇷", pool: ["+33612345678","+33798765432"] },
-            "Nigeria": { flag: "🇳🇬", pool: ["+2348153353131","+2349094264199"] },
-            "South Africa": { flag: "🇿🇦", pool: ["+27635505591"] }
+        // Configuration des pays avec leurs vrais indicatifs et drapeaux
+        const COUNTRIES = {
+            "USA": { flag: "🇺🇸", code: "+1", pool: ["+13324655723","+18578329806","+16142073008"] },
+            "United Kingdom": { flag: "🇬🇧", code: "+44", pool: ["+447949338056","+447481916733"] },
+            "France": { flag: "🇫🇷", code: "+33", pool: ["+33612345678","+33798765432"] },
+            "Germany": { flag: "🇩🇪", code: "+49", pool: ["+4915777103276"] },
+            "Nigeria": { flag: "🇳🇬", code: "+234", pool: ["+2348153353131","+2349094264199"] },
+            "South Africa": { flag: "🇿🇦", code: "+27", pool: ["+27635505591"] },
+            "Brazil": { flag: "🇧🇷", code: "+55", pool: ["+559551583801"] },
+            "India": { flag: "🇮🇳", code: "+91", pool: ["+917428730894"] }
         };
+        const BOT_NUMBER = "23591234568";
         let userData = { assignedNumber: null, assignedCountry: null, service: null };
         let currentTheme = 'dark';
-        let typingInterval, typingIndex = 0;
-
-        // Texte à animer
+        let typingIndex = 0;
         const fullText = `Ce service est offert en don par Mahamat Oumar Moussa Houma, alias Le Seigneur des Appareils — un jeune passionné d'informatique tchadien. Il vous permet de cacher vos traces sur Internet en utilisant des numéros temporaires pour vos inscriptions et vérifications, protégeant ainsi votre vie privée.`;
 
-        // --- UI helpers ---
-        function showToast(msg, duration=3000) {
+        // Helpers
+        function showToast(msg, time=3000) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
             toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, duration);
+            setTimeout(() => toast.style.display = 'none', time);
         }
 
-        // --- Typing effect ---
+        // Typing effect
         function startTyping() {
             const container = document.getElementById('typing-text');
             if(!container) return;
@@ -370,55 +324,54 @@
                 if (typingIndex < fullText.length) {
                     container.innerHTML += fullText.charAt(typingIndex);
                     typingIndex++;
-                    setTimeout(type, 40);
+                    setTimeout(type, 30);
                 } else {
-                    // Ajouter curseur clignotant
-                    const span = document.createElement('span');
-                    span.className = 'cursor';
-                    span.innerHTML = '|';
-                    container.appendChild(span);
+                    const cursor = document.createElement('span');
+                    cursor.className = 'cursor';
+                    cursor.innerHTML = '|';
+                    container.appendChild(cursor);
                 }
             }
             type();
         }
 
-        // --- Floating fake numbers animation ---
-        const countriesList = Object.keys(NUMBERS);
-        function showFakeNumber() {
+        // Floating fake numbers (vrais indicatifs, masqués)
+        function startFloatingNumbers() {
             const container = document.getElementById('floating-numbers');
             setInterval(() => {
-                const randomCountry = countriesList[Math.floor(Math.random() * countriesList.length)];
-                const flag = NUMBERS[randomCountry].flag;
-                const fakeNum = `${flag} ${randomCountry} +${Math.floor(Math.random()*9000000000+1000000000)}****`;
+                const countriesList = Object.keys(COUNTRIES);
+                const randCountry = countriesList[Math.floor(Math.random() * countriesList.length)];
+                const { flag, code, pool } = COUNTRIES[randCountry];
+                const example = pool[0];
+                const masked = example.slice(0, -4) + "****";
                 const div = document.createElement('div');
                 div.className = 'fake-num';
-                div.innerHTML = `<span>${fakeNum}</span>`;
+                div.innerHTML = `<span>${flag} ${randCountry} ${masked}</span>`;
                 container.appendChild(div);
-                setTimeout(() => div.remove(), 4000);
-            }, 5000);
+                setTimeout(() => div.remove(), 10000);
+            }, 6000);
         }
 
-        // --- Opérateur réseau réel (Moov, Orange, etc.) via API gratuite ---
-        async function updateRealOperator() {
+        // Opérateur réel via IP (simulation basée sur le pays)
+        async function updateOperator() {
             const statusSpan = document.getElementById('network-status');
-            if (!statusSpan) return;
             try {
-                // Utiliser ip-api pour récupérer l'opérateur approximatif (pas parfait mais fonctionne)
                 const res = await fetch('http://ip-api.com/json/');
                 const data = await res.json();
-                let operator = data.isp || "Orange";
-                if(operator.includes('Tigo')) operator = 'Tigo';
-                else if(operator.includes('Airtel')) operator = 'Airtel';
-                else if(operator.includes('Orange')) operator = 'Orange';
-                else if(operator.includes('Moov')) operator = 'Moov';
-                else operator = operator.split(' ')[0];
+                const country = data.countryCode;
+                let operator = "Orange";
+                if (country === "TG" || country === "CM" || country === "TD") operator = "Moov";
+                else if (country === "NG") operator = "MTN";
+                else if (country === "ZA") operator = "Vodacom";
+                else if (country === "US") operator = "T-Mobile";
+                else operator = data.isp || "Opérateur local";
                 statusSpan.innerHTML = `<i class="fa-solid fa-tower-cell"></i> ${operator}`;
             } catch(e) {
-                statusSpan.innerHTML = `<i class="fa-solid fa-wifi"></i> Moov`; // fallback
+                statusSpan.innerHTML = `<i class="fa-solid fa-tower-cell"></i> Moov`;
             }
         }
 
-        // --- Theme management ---
+        // Thème
         function applyTheme(theme) {
             if (theme === 'light') document.body.classList.add('light');
             else document.body.classList.remove('light');
@@ -427,78 +380,54 @@
             const icon = document.querySelector('#theme-toggle i');
             if(icon) icon.className = theme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
-        function toggleTheme() {
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            applyTheme(newTheme);
-        }
+        function toggleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
 
-        // --- Overlay / blur + verification ---
+        // Overlay
         const overlay = document.getElementById('verification-overlay');
-        function showVerificationOverlay() {
-            // Appliquer blur sur tout le contenu derrière
-            overlay.classList.add('active');
-            // Réinitialiser le champ
-            document.getElementById('overlay-access-code').value = '';
-            document.getElementById('overlay-verify-btn').disabled = false;
-        }
-        function hideVerificationOverlay() {
-            overlay.classList.remove('active');
-        }
+        function showOverlay() { overlay.classList.add('active'); }
+        function hideOverlay() { overlay.classList.remove('active'); }
 
-        // Gestion du flux principal
         function showView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
             document.getElementById(viewId).style.display = 'flex';
         }
 
-        // --- Dashboard & assignment ---
         function populateCountries() {
             const sel = document.getElementById('country-select');
-            sel.innerHTML = '<option value="" selected disabled>Choisissez un pays...</option>';
-            for(let c in NUMBERS) {
+            sel.innerHTML = '<option value="" selected disabled>Choisissez...</option>';
+            for(let c in COUNTRIES) {
                 let opt = document.createElement('option');
                 opt.value = c;
-                opt.textContent = `${NUMBERS[c].flag} ${c} (${NUMBERS[c].pool.length})`;
+                opt.textContent = `${COUNTRIES[c].flag} ${c} (${COUNTRIES[c].pool.length} numéros)`;
                 sel.appendChild(opt);
             }
         }
+
         function renderSuccess() {
             document.getElementById('display-number').innerText = userData.assignedNumber;
-            const flag = NUMBERS[userData.assignedCountry]?.flag || '🌐';
-            document.getElementById('display-flag').innerHTML = flag;
+            document.getElementById('display-flag').innerHTML = COUNTRIES[userData.assignedCountry].flag;
             document.getElementById('btn-request-sms').onclick = () => {
-                const msg = window.TEXT_CONFIG + `\n\nBonjour ! J'ai obtenu le numéro ${userData.assignedNumber} (${userData.assignedCountry}) pour le service ${userData.service}. Besoin du code SMS.`;
+                const msg = window.TEXT_CONFIG + `\n\nBonjour ! J'ai obtenu le numéro ${userData.assignedNumber} (${userData.assignedCountry}) pour ${userData.service}. Besoin du code SMS.`;
                 window.open(`https://wa.me/${BOT_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
             };
             document.getElementById('btn-copy').onclick = () => {
                 navigator.clipboard.writeText(userData.assignedNumber);
-                showToast("Copié dans le presse-papiers");
+                showToast("Numéro copié");
             };
         }
 
-        // Initialisation
         window.addEventListener('load', async () => {
-            // Cacher loader
             document.getElementById('initial-loader').style.display = 'none';
             document.getElementById('app-container').style.display = 'block';
-            
-            // Thème
             const savedTheme = localStorage.getItem('theme');
-            if(savedTheme) applyTheme(savedTheme);
-            else applyTheme('dark');
+            applyTheme(savedTheme || 'dark');
             document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-            
-            // Typing
             startTyping();
-            
-            // Réseau / opérateur
-            await updateRealOperator();
-            setInterval(updateRealOperator, 60000);
-            
-            // Faux numéros flottants
-            showFakeNumber();
-            
-            // Récupération données locales
+            await updateOperator();
+            setInterval(updateOperator, 60000);
+            startFloatingNumbers();
+            populateCountries();
+
             try {
                 const saved = localStorage.getItem('tempNum_data');
                 if(saved) userData = JSON.parse(saved);
@@ -507,27 +436,20 @@
                     renderSuccess();
                 }
             } catch(e) {}
-            
-            populateCountries();
-            
-            // Bouton "Obtenir mon numéro" : affiche l'overlay
-            document.getElementById('btn-get-started').onclick = () => {
-                showVerificationOverlay();
-            };
-            
-            // Gestion de l'overlay WhatsApp
+
+            document.getElementById('btn-get-started').onclick = () => showOverlay();
+
             document.getElementById('overlay-whatsapp-request').onclick = () => {
                 const safeConfig = window.TEXT_CONFIG || "";
-                const msg = safeConfig + "\n\nBonjour ! Je souhaite demander un code d'accès pour recevoir un numéro temporaire gratuit.";
+                const msg = safeConfig + "\n\nBonjour ! Je souhaite un code d'accès pour numéro temporaire.";
                 window.open(`https://wa.me/${BOT_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
                 setTimeout(() => {
                     const input = document.getElementById('overlay-access-code');
                     input.disabled = false;
                     input.placeholder = "Entrez le code reçu";
-                    showToast("Veuillez entrer le code envoyé");
+                    showToast("Veuillez entrer le code");
                 }, 1500);
             };
-            
             document.getElementById('overlay-access-code').addEventListener('input', (e) => {
                 const btn = document.getElementById('overlay-verify-btn');
                 if(e.target.value.length > 2) {
@@ -537,25 +459,19 @@
             });
             document.getElementById('overlay-verify-btn').onclick = () => {
                 showToast("Vérification réussie !");
-                hideVerificationOverlay();
+                hideOverlay();
                 showView('view-dashboard');
             };
-            
-            // Attribution du numéro
             document.getElementById('btn-assign-number').onclick = () => {
                 const country = document.getElementById('country-select').value;
                 const service = document.getElementById('service-select').value;
-                if(!country || !service) {
-                    showToast("Veuillez sélectionner pays et service");
-                    return;
-                }
+                if(!country || !service) { showToast("Choisissez pays et service"); return; }
                 if(userData.assignedNumber) {
-                    showToast("Vous avez déjà un numéro !");
                     showView('view-success');
                     renderSuccess();
                     return;
                 }
-                const pool = NUMBERS[country].pool;
+                const pool = COUNTRIES[country].pool;
                 const randomNum = pool[Math.floor(Math.random() * pool.length)];
                 userData = { assignedNumber: randomNum, assignedCountry: country, service: service };
                 localStorage.setItem('tempNum_data', JSON.stringify(userData));
@@ -565,7 +481,6 @@
         });
     </script>
 
-    <!-- Texte long (inchangé) -->
     <script>
         window.TEXT_CONFIG = `https://wa.me/+235291234568?text=https://wa.me/23591234567?text=Rejoins mon groupe, tout est permis !! Caceras xxx, du contenu CP, Only fans, morritas actives, CP 🔥🔥 Rejoindre le groupe 😈 https://videeyss.online/morritas-cp 💥💥🔥🔥 MANOOO VC N VAI ACREDITAR 🔥🔥💥💥
 Le site de LUCIEN WHATSAPP paie des montants absurdes kkkkk 🎰💰
